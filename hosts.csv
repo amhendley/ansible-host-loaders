@@ -1,0 +1,15 @@
+host,group,variables
+host1,atlanta,"http_port=80 maxRequestsPerChild=808"
+host2,atlanta,"http_port=303 maxRequestsPerChild=909"
+host2,raleigh,"ansible_connection=ssh ansible_user=mpdehaan"
+host3,raleigh,"ansible_connection=ssh ansible_user=mdehaan"
+atlanta,southeast:children,
+raleigh,southeast:children,
+"some_server=foo.southeast.example.com",southeast:vars,
+"halon_system_timeout=30",southeast:vars,
+"self_destruct_countdown=60",southeast:vars,
+"escape_pods=2",southeast:vars,
+southeast,usa:children,
+northeast,usa:children,
+southwest,usa:children,
+northwest,usa:children,

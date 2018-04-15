@@ -1,0 +1,23 @@
+[atlanta]
+host1  http_port=80 maxRequestsPerChild=808
+host2  http_port=303 maxRequestsPerChild=909
+
+[raleigh]
+host2    ansible_connection=ssh    ansible_user=mpdehaan
+host3    ansible_connection=ssh    ansible_user=mdehaan
+
+[southeast:children]
+atlanta
+raleigh
+
+[southeast:vars]
+some_server=foo.southeast.example.com
+halon_system_timeout=30
+self_destruct_countdown=60
+escape_pods=2
+
+[usa:children]
+southeast
+northeast
+southwest
+northwest
