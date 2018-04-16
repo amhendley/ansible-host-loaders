@@ -38,7 +38,9 @@ with open(filename, 'r') as f:
             group = section
             state = 'hosts'
 
-        data[group] = {}
+        # Added this condition to ensure prior population is not wiped out.
+        if group not in data:
+            data[group] = {}
 
         if state not in data[group]:
             if state == 'vars':
