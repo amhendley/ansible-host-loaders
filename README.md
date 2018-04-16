@@ -5,6 +5,7 @@ Ansible inventories.
 
 * Original `hosts` INI file
 * A CSV formatted file
+* A PostgreSQL database source (query would need to be modified)
 * *Hopefully more to come...*
 
 ## References
