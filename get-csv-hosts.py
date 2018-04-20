@@ -1,9 +1,9 @@
+#!/usr/bin/python
+
 import os
 import json
 import sys
 import csv
-
-
 from ansible.utils.shlex import shlex_split
 from ansible.plugins.inventory.ini import InventoryModule
 
@@ -30,7 +30,7 @@ with open(filename, 'r') as f:
     for line in reader:
         section = line['group']
 
-        print('Section : %s' % section)
+        #print('Section : %s' % section)
 
         if ':' in section:
             group, state = section.split(':')
@@ -56,7 +56,7 @@ with open(filename, 'r') as f:
         except ValueError as e:
             msg('E', "Error parsing host definition '%s': %s" % (line, e))
 
-        print('tokens: %s' % tokens)
+        #print('tokens: %s' % tokens)
         (hostnames, port) = mip._expand_hostpattern(tokens[0])
 
         # Create 'all' group if no group was defined yet
@@ -106,6 +106,4 @@ with open(filename, 'r') as f:
                     for key, val in variables.items():
                         data['_meta']['hostvars'][host][key] = val
 
-
-print('---')
 print(json.dumps(data, indent=4, sort_keys=True))
