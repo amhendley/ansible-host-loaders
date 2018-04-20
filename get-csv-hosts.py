@@ -1,5 +1,6 @@
 #!/usr/bin/python
 
+import argparse
 import os
 import json
 import sys
@@ -18,10 +19,24 @@ def msg(_type, text, exit=0):
     sys.exit(exit)
 
 
+filename = os.getenv('filename')
+
+parser = argparse.ArgumentParser(prog=os.path.basename(__file__),
+                                 description='Ansible dynamic hosts loader for INI file sources')
+
+try:
+    parser.add_argument('-f', '--filename', required=False, help='Source Ansible INI file')
+    parser.add_argument('-l', '--list', required=False, action='store_true', help='Ansible inventory list arg')
+
+    args = parser.parse_args()
+except:
+    sys.exit()
+
+if args.filename:
+    filename = args.filename
+
 data = {}
 mip = MyInventoryParser()
-
-filename = os.getenv('filename')
 
 with open(filename, 'r') as f:
     reader = csv.DictReader(f)
