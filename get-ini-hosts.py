@@ -1,8 +1,9 @@
+#!/usr/bin/python
+
+import argparse
 import os
 import json
 import sys
-
-
 from ansible.utils.shlex import shlex_split
 from ansible.plugins.inventory.ini import InventoryModule
 
@@ -17,10 +18,24 @@ def msg(_type, text, exit=0):
     sys.exit(exit)
 
 
+filename = os.getenv('filename')
+
+parser = argparse.ArgumentParser(prog=os.path.basename(__file__),
+                                 description='Ansible dynamic hosts loader for INI file sources')
+
+try:
+    parser.add_argument('-f', '--filename', required=False, help='Source Ansible INI file')
+    parser.add_argument('-l', '--list', required=False, action='store_true', help='Ansible inventory list arg')
+
+    args = parser.parse_args()
+except:
+    sys.exit()
+
+if args.filename:
+    filename = args.filename
+
 data = {}
 mip = MyInventoryParser()
-
-filename = os.getenv('filename')
 
 with open(filename, 'r') as f:
     for line in f:
@@ -29,7 +44,7 @@ with open(filename, 'r') as f:
         if ln.startswith('['):
             section = ln.lstrip('[').rstrip(']')
 
-            print('Section : %s' % section)
+            #print('Section : %s' % section)
 
             if ':' in section:
                 group, state = section.split(':')
@@ -53,7 +68,7 @@ with open(filename, 'r') as f:
                 except ValueError as e:
                     msg('E', "Error parsing host definition '%s': %s" % (line, e))
 
-                print('tokens: %s' % tokens)
+                #print('tokens: %s' % tokens)
                 (hostnames, port) = mip._expand_hostpattern(tokens[0])
 
                 # Create 'all' group if no group was defined yet
@@ -103,6 +118,4 @@ with open(filename, 'r') as f:
                             for key, val in variables.items():
                                 data['_meta']['hostvars'][host][key] = val
 
-
-print('---')
 print(json.dumps(data, indent=4, sort_keys=True))
